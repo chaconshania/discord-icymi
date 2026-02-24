@@ -1,5 +1,11 @@
 export type NotificationType = "popular" | "interesting";
 
+export interface FilterServer {
+  id: string;
+  name: string;
+  imageUrl: string;
+}
+
 export interface Reaction {
   id: string;
   /** "emoji" = unicode char, "custom-text" = Discord sticker/text emoji */
@@ -11,8 +17,10 @@ export interface Reaction {
 export interface AvatarConfig {
   /** Tailwind gradient classes, e.g. "from-amber-700 to-amber-900" */
   gradient: string;
-  /** Emoji or short text shown inside the avatar circle */
+  /** Emoji or short text shown inside the avatar circle (fallback when no imageUrl) */
   icon: string;
+  /** Optional photo URL — renders an image instead of gradient+emoji */
+  imageUrl?: string;
 }
 
 export interface ICYMIMessage {

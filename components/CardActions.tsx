@@ -1,14 +1,17 @@
-import { Reply, Share2 } from "lucide-react";
 
 export default function CardActions() {
   return (
     <div className="flex items-center gap-3 mt-4">
-      <button className="flex-1 flex items-center justify-center gap-2 h-[42px] rounded-full bg-discord-bg-elevated hover:bg-discord-bg-hover active:bg-discord-bg-tertiary text-discord-text-normal text-[14px] font-semibold transition-colors">
-        <Reply size={16} strokeWidth={2} />
+      <button className="flex-1 flex items-center justify-center gap-2 h-[42px] rounded-full hover:bg-discord-bg-hover active:bg-discord-bg-tertiary text-discord-text-normal text-[14px] font-semibold transition-colors" style={{ backgroundColor: "#26262E" }}>
+        <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+          <path d="M17.6667 34.3332C17.056 34.9563 16.7139 35.794 16.7139 36.6666C16.7139 37.5391 17.056 38.3768 17.6667 38.9999L34.3334 55.6666C34.9753 56.148 35.7693 56.3817 36.5697 56.3248C37.3701 56.268 38.123 55.9243 38.6904 55.3569C39.2578 54.7895 39.6015 54.0365 39.6583 53.2362C39.7152 52.4358 39.4815 51.6418 39.0001 50.9999L28.0667 39.9999H46.6667C52.8551 39.9999 58.79 42.4582 63.1659 46.8341C67.5417 51.2099 70.0001 57.1448 70.0001 63.3332V76.6666C70.0001 77.5506 70.3512 78.3985 70.9764 79.0236C71.6015 79.6487 72.4493 79.9999 73.3334 79.9999C74.2174 79.9999 75.0653 79.6487 75.6904 79.0236C76.3155 78.3985 76.6667 77.5506 76.6667 76.6666V63.3332C76.6667 59.3936 75.8908 55.4925 74.3831 51.8527C72.8755 48.2129 70.6657 44.9058 67.8799 42.12C65.0942 39.3343 61.787 37.1245 58.1472 35.6168C54.5075 34.1092 50.6064 33.3332 46.6667 33.3332H28.0334L39.0334 22.3332C39.5753 21.6917 39.8551 20.8693 39.8168 20.0305C39.7786 19.1916 39.4252 18.3981 38.8272 17.8085C38.2292 17.219 37.4308 16.8768 36.5915 16.8505C35.7521 16.8242 34.9338 17.1156 34.3001 17.6666L17.6334 34.3332H17.6667Z" fill="#ABABAB"/>
+        </svg>
         Reply
       </button>
-      <button className="flex-1 flex items-center justify-center gap-2 h-[42px] rounded-full bg-discord-bg-elevated hover:bg-discord-bg-hover active:bg-discord-bg-tertiary text-discord-text-normal text-[14px] font-semibold transition-colors">
-        <Share2 size={16} strokeWidth={2} />
+      <button className="flex-1 flex items-center justify-center gap-2 h-[42px] rounded-full hover:bg-discord-bg-hover active:bg-discord-bg-tertiary text-discord-text-normal text-[14px] font-semibold transition-colors" style={{ backgroundColor: "#26262E" }}>
+        <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+          <path d="M50.0002 83.3335C57.3969 83.3277 64.5817 80.8618 70.423 76.3241C76.2644 71.7865 80.4306 65.4348 82.2655 58.2692C84.1004 51.1037 83.4999 43.5313 80.5584 36.7446C77.617 29.9578 72.5018 24.3422 66.0182 20.782C59.5346 17.2218 52.051 15.9192 44.7458 17.0794C37.4406 18.2396 30.7288 21.7966 25.6672 27.1904C20.6057 32.5842 17.4819 39.5083 16.7879 46.8724C16.0938 54.2365 17.8689 61.6223 21.8335 67.8668C22.2668 68.5001 22.2002 69.3335 21.7002 69.9001L14.8335 77.8001C14.4107 78.2814 14.1356 78.8743 14.041 79.5078C13.9463 80.1414 14.0363 80.7888 14.3 81.3726C14.5638 81.9563 14.9902 82.4518 15.5282 82.7995C16.0661 83.1473 16.6929 83.3326 17.3335 83.3335H50.0002Z" fill="#ABABAB"/>
+        </svg>
         Forward
       </button>
     </div>

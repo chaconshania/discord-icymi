@@ -1,33 +1,69 @@
+import Image from "next/image";
 import type { AvatarConfig } from "@/types";
 
 interface AvatarStackProps {
   avatars: [AvatarConfig, AvatarConfig];
-  /** Background color of the ring separating the two avatars (match parent bg) */
+  /** Card background color — used as the border ring on the user badge */
   ringColor?: string;
 }
 
 export default function AvatarStack({
   avatars,
-  ringColor = "#111214",
+  ringColor = "#1C1D23",
 }: AvatarStackProps) {
-  const [back, front] = avatars;
+  const [server, user] = avatars;
 
   return (
-    <div className="relative w-[46px] h-[46px] flex-shrink-0" aria-hidden>
-      {/* Back avatar — top-right */}
+    <div className="relative flex-shrink-0" style={{ width: 46, height: 46 }} aria-hidden>
+
+      {/* Server icon — rounded rectangle, fills most of the space */}
       <div
-        className={`absolute top-0 right-0 w-[30px] h-[30px] rounded-full bg-gradient-to-br ${back.gradient} flex items-center justify-center text-[13px] select-none`}
+        className="absolute top-0 left-0 overflow-hidden"
+        style={{ width: 40, height: 40, borderRadius: 10 }}
       >
-        {back.icon}
+        {server.imageUrl ? (
+          <Image
+            src={server.imageUrl}
+            alt=""
+            width={40}
+            height={40}
+            className="object-cover w-full h-full"
+          />
+        ) : (
+          <div
+            className={`w-full h-full bg-gradient-to-br ${server.gradient} flex items-center justify-center text-[16px] select-none`}
+          >
+            {server.icon}
+          </div>
+        )}
       </div>
 
-      {/* Front avatar — bottom-left, with a ring matching the bg so it looks "on top" */}
+      {/* User avatar badge — small circle, bottom-right, with ring border */}
       <div
-        className={`absolute bottom-0 left-0 w-[30px] h-[30px] rounded-full bg-gradient-to-br ${front.gradient} flex items-center justify-center text-[13px] select-none`}
-        style={{ boxShadow: `0 0 0 2.5px ${ringColor}` }}
+        className="absolute bottom-0 right-0 rounded-full overflow-hidden"
+        style={{
+          width: 22,
+          height: 22,
+          boxShadow: `0 0 0 2px ${ringColor}`,
+        }}
       >
-        {front.icon}
+        {user.imageUrl ? (
+          <Image
+            src={user.imageUrl}
+            alt=""
+            width={22}
+            height={22}
+            className="object-cover w-full h-full"
+          />
+        ) : (
+          <div
+            className={`w-full h-full bg-gradient-to-br ${user.gradient} flex items-center justify-center text-[9px] select-none`}
+          >
+            {user.icon}
+          </div>
+        )}
       </div>
+
     </div>
   );
 }

@@ -28,7 +28,8 @@ export default function BottomNav() {
 
   return (
     <nav
-      className="flex items-stretch border-t border-white/[0.06] bg-discord-bg"
+      className="flex items-stretch border-t border-white/[0.06]"
+      style={{ backgroundColor: "#2C2D35" }}
       role="tablist"
       aria-label="Main navigation"
     >

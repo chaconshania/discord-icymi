@@ -7,7 +7,7 @@ interface ReactionPillProps {
 export default function ReactionPill({ reaction }: ReactionPillProps) {
   return (
     <button
-      className="flex items-center gap-1 h-7 px-2.5 rounded-full bg-discord-bg-elevated border border-white/[0.08] hover:bg-discord-bg-hover hover:border-discord-brand/40 active:bg-discord-bg-tertiary transition-colors"
+      className="flex items-center gap-1 h-7 px-2.5 rounded-lg bg-discord-bg-elevated border border-white/[0.08] hover:bg-discord-bg-hover hover:border-discord-brand/40 active:bg-discord-bg-tertiary transition-colors"
       aria-label={`${reaction.value} reaction, ${reaction.count} people`}
     >
       {reaction.type === "custom-text" ? (

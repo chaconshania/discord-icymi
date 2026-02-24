@@ -1,6 +1,9 @@
+"use client";
+
 import ICYMIHeader from "./ICYMIHeader";
 import MessageCard from "./MessageCard";
 import BottomNav from "./BottomNav";
+import IOSStatusBar from "./IOSStatusBar";
 import { icymiMessages } from "@/data/messages";
 
 /**
@@ -16,14 +19,18 @@ import { icymiMessages } from "@/data/messages";
  *   │  Bottom nav     │
  *   └─────────────────┘
  */
-export default function ICYMIScreen() {
+interface ICYMIScreenProps {
+  onFilter?: () => void;
+}
+
+export default function ICYMIScreen({ onFilter }: ICYMIScreenProps) {
   return (
-    <div className="flex flex-col h-screen bg-discord-bg overflow-hidden">
-      {/* iOS-style status bar safe area */}
-      <div className="h-11 bg-discord-bg flex-shrink-0" aria-hidden />
+    <div className="flex flex-col h-full bg-discord-bg overflow-hidden">
+      {/* iOS status bar */}
+      <IOSStatusBar />
 
       {/* Page header */}
-      <ICYMIHeader />
+      <ICYMIHeader onFilter={onFilter} />
 
       {/* Scrollable card feed */}
       <main
@@ -35,7 +42,8 @@ export default function ICYMIScreen() {
             {/* Full-width separator between cards */}
             {index > 0 && (
               <div
-                className="h-px bg-white/[0.06] mx-0"
+                className="h-2.5"
+                style={{ backgroundColor: "#131318" }}
                 role="separator"
                 aria-hidden
               />
@@ -47,6 +55,11 @@ export default function ICYMIScreen() {
 
       {/* Bottom navigation */}
       <BottomNav />
+
+      {/* iOS home indicator */}
+      <div className="flex justify-center pb-2 pt-3 flex-shrink-0" style={{ backgroundColor: "#2C2D35" }} aria-hidden>
+        <div className="w-[134px] h-[5px] rounded-full bg-white" />
+      </div>
     </div>
   );
 }

@@ -19,8 +19,16 @@ export const icymiMessages: ICYMIMessage[] = [
     ],
     showActions: true,
     avatars: [
-      { gradient: "from-amber-600 to-orange-900", icon: "🏔️" },
-      { gradient: "from-teal-400 to-blue-600", icon: "🐾" },
+      {
+        gradient: "from-amber-600 to-orange-900",
+        icon: "🏔️",
+        imageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?fit=crop&w=64&h=64",
+      },
+      {
+        gradient: "from-teal-400 to-blue-600",
+        icon: "🐾",
+        imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?fit=crop&w=64&h=64",
+      },
     ],
   },
   {
@@ -32,10 +40,20 @@ export const icymiMessages: ICYMIMessage[] = [
     authorColor: "#23a55a",
     contextLabel: "sent a message you find interesting:",
     body: "Looking to book a court for next weekend for some pickup basketball. Need a count for how many people would be interested!",
-    showActions: false,
+    showActions: true,
     avatars: [
-      { gradient: "from-blue-500 to-indigo-700", icon: "🌐" },
-      { gradient: "from-green-400 to-emerald-600", icon: "👾" },
+      {
+        gradient: "from-blue-500 to-indigo-700",
+        icon: "🌐",
+        // Sports Server icon — basketball court
+        imageUrl: "https://images.unsplash.com/photo-1504450758481-7338eba7524a?fit=crop&w=64&h=64",
+      },
+      {
+        gradient: "from-green-400 to-emerald-600",
+        icon: "👾",
+        // The Real Phibi's avatar
+        imageUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=crop&w=64&h=64",
+      },
     ],
   },
 ];
