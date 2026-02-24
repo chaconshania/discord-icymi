@@ -12,7 +12,7 @@ export default function ICYMIHeader({ onFilter }: ICYMIHeaderProps) {
         <h1 className="text-[20px] font-extrabold text-white tracking-tight leading-none">
           ICYMI
         </h1>
-        <span className="text-[10px] font-bold tracking-[0.12em] uppercase leading-none" style={{ color: "#949CF7" }}>
+        <span className="text-[13px] font-bold tracking-[0.04em] uppercase leading-none" style={{ color: "#949CF7" }}>
           PRE-ALPHA
         </span>
       </div>
