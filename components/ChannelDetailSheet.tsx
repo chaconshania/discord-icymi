@@ -1,17 +1,9 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
-import React, { useState } from "react";
-import type { FilterServer, FilterChannel } from "@/types";
-import ChannelDetailSheet from "./ChannelDetailSheet";
+import React, { useState, useEffect } from "react";
+import type { FilterChannel } from "@/types";
 
 type Visibility = "less" | "good" | "more";
-
-const VISIBILITY_LABELS: Record<Visibility, string> = {
-  less: "See Less",
-  good: "Good As Is",
-  more: "See More!",
-};
 
 const GoodAsIsIcon = () => (
   <svg width="26" height="26" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
@@ -27,8 +19,6 @@ const SeeMoreIcon = () => (
   </svg>
 );
 
-// Same face as GoodAsIsIcon but with the smile subpath reflected vertically
-// (new_y = 107 - old_y) to produce a frown cutout via the evenodd fill rule.
 const SeeLessIcon = () => (
   <svg width="26" height="26" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
     <path fillRule="evenodd" clipRule="evenodd" d="M40.0001 76.6668C49.7247 76.6668 59.051 72.8037 65.9274 65.9274C72.8037 59.0511 76.6668 49.7248 76.6668 40.0002C76.6668 30.2756 72.8037 20.9492 65.9274 14.0729C59.051 7.19658 49.7247 3.3335 40.0001 3.3335C30.2755 3.3335 20.9492 7.19658 14.0729 14.0729C7.19659 20.9492 3.3335 30.2756 3.3335 40.0002C3.3335 49.7248 7.19659 59.0511 14.0729 65.9274C20.9492 72.8037 30.2755 76.6668 40.0001 76.6668ZM21.6668 43.3335C22.9929 43.3335 24.2646 42.8067 25.2023 41.869C26.14 40.9314 26.6668 39.6596 26.6668 38.3335C26.6668 37.0074 26.14 35.7356 25.2023 34.798C24.2646 33.8603 22.9929 33.3335 21.6668 33.3335C20.3407 33.3335 19.0689 33.8603 18.1313 34.798C17.1936 35.7356 16.6668 37.0074 16.6668 38.3335C16.6668 39.6596 17.1936 40.9314 18.1313 41.869C19.0689 42.8067 20.3407 43.3335 21.6668 43.3335ZM58.3335 43.3335C59.6595 43.3335 60.9313 42.8067 61.869 41.869C62.8067 40.9314 63.3335 39.6596 63.3335 38.3335C63.3335 37.0074 62.8067 35.7356 61.869 34.798C60.9313 33.8603 59.6595 33.3335 58.3335 33.3335C57.0074 33.3335 55.7356 33.8603 54.7979 34.798C53.8602 35.7356 53.3335 37.0074 53.3335 38.3335C53.3335 39.6596 53.8602 40.9314 54.7979 41.869C55.7356 42.8067 57.0074 43.3335 58.3335 43.3335ZM25.6668 59.7665C26.0299 60.0122 26.438 60.1838 26.8675 60.2715C27.2971 60.3593 27.7398 60.3614 28.1702 60.2778C28.6006 60.1942 29.0103 60.0265 29.3757 59.7843C29.7412 59.5422 30.0554 59.2303 30.3001 58.8665C31.3661 57.2715 32.8089 55.9639 34.5009 55.0596C36.1928 54.1553 38.0817 53.6822 40.0001 53.6822C41.9186 53.6822 43.8074 54.1553 45.4994 55.0596C47.1913 55.9639 48.6342 57.2715 49.7001 58.8665C50.1952 59.6003 50.9615 60.1073 51.8304 60.2761C52.6993 60.4449 53.5997 60.2616 54.3335 59.7665C55.0672 59.2714 55.5743 58.5051 55.743 57.6362C55.9118 56.7673 55.7285 55.8669 55.2335 55.1332C53.5577 52.6306 51.2911 50.5795 48.6342 49.1611C45.9774 47.7427 43.0119 47.0006 40.0001 47.0006C36.9883 47.0006 34.0229 47.7427 31.366 49.1611C28.7091 50.5795 26.4426 52.6306 24.7668 55.1332C24.5159 55.4975 24.34 55.9081 24.2494 56.3411C24.1588 56.7741 24.1553 57.2207 24.239 57.6551C24.3228 58.0894 24.4922 58.5028 24.7373 58.871C24.9824 59.2392 25.2984 59.555 25.6668 59.8V59.7665Z" fill="#ABABAB"/>
@@ -41,192 +31,164 @@ const SEGMENTS: { value: Visibility; label: string; icon: React.ReactElement }[]
   { value: "more", label: "See More!", icon: <SeeMoreIcon /> },
 ];
 
-interface ServerDetailScreenProps {
-  server: FilterServer;
-  onBack: () => void;
+interface ChannelDetailSheetProps {
+  channel: FilterChannel;
+  serverName: string;
+  onClose: () => void;
 }
 
-export default function ServerDetailScreen({ server, onBack }: ServerDetailScreenProps) {
+
+export default function ChannelDetailSheet({ channel, serverName, onClose }: ChannelDetailSheetProps) {
   const [visibility, setVisibility] = useState<Visibility>(() => {
     if (typeof window === "undefined") return "good";
-    return (localStorage.getItem(`icymi-server-${server.id}`) as Visibility) ?? "good";
+    return (localStorage.getItem(`icymi-channel-${channel.id}`) as Visibility) ?? "good";
   });
   const [showInICYMI, setShowInICYMI] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    requestAnimationFrame(() => setMounted(true));
+  }, []);
 
   const handleVisibilityChange = (v: Visibility) => {
     setVisibility(v);
-    localStorage.setItem(`icymi-server-${server.id}`, v);
+    localStorage.setItem(`icymi-channel-${channel.id}`, v);
   };
-  const [selectedChannel, setSelectedChannel] = useState<FilterChannel | null>(null);
 
   return (
-    <div className="flex flex-col h-full relative" style={{ backgroundColor: "#1C1D22" }}>
+    <>
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 z-10"
+        style={{
+          backgroundColor: "rgba(0,0,0,0.6)",
+          opacity: mounted ? 1 : 0,
+          transition: "opacity 300ms",
+        }}
+        onClick={onClose}
+        aria-hidden
+      />
 
-      {/* Header */}
-      <div className="relative flex items-center px-4 py-3 flex-shrink-0" style={{ borderBottom: "1px solid #2D2E33" }}>
-        <button
-          onClick={onBack}
-          aria-label="Back"
-          className="w-9 h-9 flex items-center justify-center rounded-full text-white hover:bg-white/10 active:bg-white/[0.06] transition-colors"
-        >
-          <ChevronLeft size={20} strokeWidth={2.5} />
-        </button>
-        <h1 className="absolute left-1/2 -translate-x-1/2 text-[17px] font-bold text-white whitespace-nowrap">
-          {server.name}
-        </h1>
-      </div>
+      {/* Sheet */}
+      <div
+        className="absolute bottom-0 left-0 right-0 z-20 flex flex-col rounded-t-2xl overflow-hidden"
+        style={{
+          backgroundColor: "#1C1D22",
+          transform: mounted ? "translateY(0)" : "translateY(100%)",
+          transition: "transform 300ms cubic-bezier(0.32, 0.72, 0, 1)",
+          maxHeight: "88%",
+        }}
+      >
+        {/* Drag handle */}
+        <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
+          <div className="w-9 h-1 rounded-full" style={{ backgroundColor: "rgba(255,255,255,0.25)" }} />
+        </div>
 
-      {/* Scrollable body */}
-      <div className="flex-1 overflow-y-auto">
-
-        {/* Server Preferences */}
-        <div className="px-4 pt-3 pb-4">
-          <p className="text-[13px] font-semibold mb-0.5" style={{ color: "#b5bac1" }}>
-            Server Preferences
-          </p>
-          <p className="text-[13px] mb-3" style={{ color: "#80848e" }}>
-            How much content would you like to see from {server.name} overall?
-          </p>
-
-          {/* Segmented control */}
-          <div className="rounded-xl flex gap-1 p-1.5" style={{ backgroundColor: "#27272F" }}>
-            {SEGMENTS.map((seg) => {
-              const selected = visibility === seg.value;
-              return (
-                <button
-                  key={seg.value}
-                  onClick={() => handleVisibilityChange(seg.value)}
-                  className="flex-1 flex flex-col items-center gap-1 py-3 rounded-lg transition-all"
-                  style={{ backgroundColor: selected ? "#3A3B45" : "transparent" }}
-                >
-                  {seg.icon}
-                  <span
-                    className="text-[12px] font-semibold"
-                    style={{ color: selected ? "white" : "#80848e" }}
-                  >
-                    {seg.label}
-                  </span>
-                </button>
-              );
-            })}
+        {/* Channel icon + name */}
+        <div className="flex items-center gap-3 px-4 pt-3 pb-4 flex-shrink-0">
+          <div
+            className="rounded-xl flex items-center justify-center text-3xl flex-shrink-0"
+            style={{ width: 56, height: 56, backgroundColor: "#27272F" }}
+          >
+            {channel.emoji ?? "#"}
+          </div>
+          <div className="flex flex-col">
+            <h2 className="text-[17px] font-bold text-white">#{channel.name}</h2>
+            <p className="text-[13px] mt-0.5" style={{ color: "#80848e" }}>{serverName}</p>
           </div>
         </div>
 
-        {/* Show content in ICYMI toggle */}
-        <div className="px-4 pb-1">
-          <div className="rounded-xl px-4" style={{ backgroundColor: "#27272F" }}>
-            <div className="flex items-center justify-between py-4">
-              <span className="text-[15px] font-semibold text-white">Show content in ICYMI</span>
+        {/* Scrollable content */}
+        <div className="flex-1 overflow-y-auto px-4 pb-2">
 
-              {/* iOS-style toggle */}
-              <button
-                onClick={() => setShowInICYMI((v) => !v)}
-                aria-label={showInICYMI ? "Disable ICYMI" : "Enable ICYMI"}
-                className="relative flex-shrink-0"
-                style={{
-                  width: 50,
-                  height: 30,
-                  borderRadius: 15,
-                  backgroundColor: showInICYMI ? "#5865f2" : "#4e5058",
-                  transition: "background-color 200ms",
-                }}
-              >
-                <div
-                  className="absolute top-[3px] flex items-center justify-center rounded-full bg-white"
-                  style={{
-                    width: 24,
-                    height: 24,
-                    transform: showInICYMI ? "translateX(23px)" : "translateX(3px)",
-                    transition: "transform 200ms",
-                  }}
-                >
-                  {showInICYMI && (
-                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden>
-                      <path
-                        d="M2 6.5L5 9.5L11 3.5"
-                        stroke="#5865f2"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  )}
-                </div>
-              </button>
+          {/* Channel Preferences */}
+          <div className="pb-4">
+            <p className="text-[13px] font-semibold mb-0.5" style={{ color: "#b5bac1" }}>
+              Channel Preferences
+            </p>
+            <p className="text-[13px] mb-3" style={{ color: "#80848e" }}>
+              How much content would you like to see from #{channel.name}?
+            </p>
+
+            {/* Segmented control */}
+            <div className="rounded-xl flex gap-1 p-1.5" style={{ backgroundColor: "#27272F" }}>
+              {SEGMENTS.map((seg) => {
+                const selected = visibility === seg.value;
+                return (
+                  <button
+                    key={seg.value}
+                    onClick={() => handleVisibilityChange(seg.value)}
+                    className="flex-1 flex flex-col items-center gap-1 py-3 rounded-lg transition-all"
+                    style={{ backgroundColor: selected ? "#3A3B45" : "transparent" }}
+                  >
+                    {seg.icon}
+                    <span
+                      className="text-[12px] font-semibold"
+                      style={{ color: selected ? "white" : "#80848e" }}
+                    >
+                      {seg.label}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
-          <p className="text-[12px] px-1 mt-1.5" style={{ color: "#80848e" }}>
-            Turning this off means no content from this server will be shown.
-          </p>
-        </div>
 
-        {/* Channel Preferences */}
-        <div className="px-4 pt-5 pb-4">
-          <p className="text-[13px] font-semibold mb-0.5" style={{ color: "#b5bac1" }}>
-            Channel Preferences
-          </p>
-          <p className="text-[13px] mb-3" style={{ color: "#80848e" }}>
-            Adjust how much content would you like to see from each channel.
-          </p>
+          {/* Show content in ICYMI toggle */}
+          <div className="pb-1">
+            <div className="rounded-xl px-4" style={{ backgroundColor: "#27272F" }}>
+              <div className="flex items-center justify-between py-4">
+                <span className="text-[15px] font-semibold text-white">Show channel content in ICYMI</span>
 
-          {/* Text Channels group header */}
-          <div className="flex items-center gap-1.5 mb-2">
-            <ChevronDown size={14} strokeWidth={2.5} color="#80848e" />
-            <span className="text-[13px] font-semibold" style={{ color: "#b5bac1" }}>
-              Text Channels
-            </span>
-          </div>
-
-          {/* Channel list */}
-          <div className="rounded-xl overflow-hidden" style={{ backgroundColor: "#27272F" }}>
-            {server.channels.map((channel, i) => (
-              <div key={channel.id}>
-                {i > 0 && (
-                  <div
-                    className="mx-4"
-                    style={{ height: 1, backgroundColor: "rgba(255,255,255,0.06)" }}
-                    aria-hidden
-                  />
-                )}
+                {/* iOS-style toggle */}
                 <button
-                  className="w-full flex items-center gap-2.5 px-4 hover:bg-white/[0.04] active:bg-white/[0.08] transition-colors"
-                  style={{ height: 52 }}
-                  onClick={() => setSelectedChannel(channel)}
+                  onClick={() => setShowInICYMI((v) => !v)}
+                  aria-label={showInICYMI ? "Disable channel in ICYMI" : "Enable channel in ICYMI"}
+                  className="relative flex-shrink-0 ml-3"
+                  style={{
+                    width: 50,
+                    height: 30,
+                    borderRadius: 15,
+                    backgroundColor: showInICYMI ? "#5865f2" : "#4e5058",
+                    transition: "background-color 200ms",
+                  }}
                 >
-                  <span
-                    className="text-[16px] font-bold flex-shrink-0"
-                    style={{ color: "#80848e" }}
+                  <div
+                    className="absolute top-[3px] flex items-center justify-center rounded-full bg-white"
+                    style={{
+                      width: 24,
+                      height: 24,
+                      transform: showInICYMI ? "translateX(23px)" : "translateX(3px)",
+                      transition: "transform 200ms",
+                    }}
                   >
-                    #
-                  </span>
-                  <span className="flex-1 text-left text-[15px] font-semibold text-white">
-                    {channel.name}
-                  </span>
-                  <span className="text-[13px] flex-shrink-0" style={{ color: "#80848e" }}>
-                    {VISIBILITY_LABELS[(localStorage.getItem(`icymi-channel-${channel.id}`) as Visibility) ?? "good"]}
-                  </span>
-                  <ChevronRight size={16} strokeWidth={2.5} color="#80848e" className="flex-shrink-0" />
+                    {showInICYMI && (
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden>
+                        <path
+                          d="M2 6.5L5 9.5L11 3.5"
+                          stroke="#5865f2"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    )}
+                  </div>
                 </button>
               </div>
-            ))}
+            </div>
+            <p className="text-[12px] px-1 mt-1.5" style={{ color: "#80848e" }}>
+              Turning this off means no content from this channel will be shown.
+            </p>
           </div>
+
         </div>
 
+        {/* iOS home indicator */}
+        <div className="flex justify-center pb-2 pt-3 flex-shrink-0" aria-hidden>
+          <div className="w-[134px] h-[5px] rounded-full bg-white opacity-30" />
+        </div>
       </div>
-
-      {/* iOS home indicator */}
-      <div className="flex justify-center pb-2 pt-3 flex-shrink-0" aria-hidden>
-        <div className="w-[134px] h-[5px] rounded-full bg-white opacity-30" />
-      </div>
-
-      {/* Channel detail sheet */}
-      {selectedChannel && (
-        <ChannelDetailSheet
-          channel={selectedChannel}
-          serverName={server.name}
-          onClose={() => setSelectedChannel(null)}
-        />
-      )}
-    </div>
+    </>
   );
 }

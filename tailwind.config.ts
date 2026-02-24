@@ -28,7 +28,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: [
-          "var(--font-inter)",
+          "var(--font-gg-sans)",
           "gg sans",
           "Noto Sans",
           "Helvetica Neue",

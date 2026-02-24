@@ -3,6 +3,7 @@ export type NotificationType = "popular" | "interesting";
 export interface FilterChannel {
   id: string;
   name: string;
+  emoji?: string;
 }
 
 export interface FilterServer {

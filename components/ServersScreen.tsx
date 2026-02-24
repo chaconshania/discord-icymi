@@ -18,7 +18,7 @@ export default function ServersScreen({
   return (
     <div className="flex flex-col h-full" style={{ backgroundColor: "#1C1D22" }}>
       {/* Header */}
-      <div className="relative flex items-center px-4 py-3">
+      <div className="relative flex items-center px-4 py-3" style={{ borderBottom: "1px solid #2D2E33" }}>
         <button
           onClick={onClose}
           aria-label="Close"
@@ -32,7 +32,7 @@ export default function ServersScreen({
       </div>
 
       {/* Server list card */}
-      <div className="px-4 pt-2">
+      <div className="px-4 pt-4">
         <div className="rounded-xl overflow-hidden" style={{ backgroundColor: "#2C2D35" }}>
           {servers.map((server, index) => (
             <div key={server.id}>

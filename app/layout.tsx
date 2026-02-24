@@ -1,10 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
+const ggSans = localFont({
+  src: [
+    { path: "../public/fonts/ggsansvf-VF.woff2", style: "normal" },
+    { path: "../public/fonts/ggsansvf-Italic-VF.woff", style: "italic" },
+  ],
+  variable: "--font-gg-sans",
   display: "swap",
 });
 
@@ -28,7 +31,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-sans`}>{children}</body>
+      <body className={`${ggSans.variable} font-sans`}>{children}</body>
     </html>
   );
 }
