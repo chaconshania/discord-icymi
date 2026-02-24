@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: #0a0a0c;
+}
+
+/* Remove tap highlight on mobile */
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth scrolling */
+.scroll-area {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+}
+
+/* Custom scrollbar */
+.scroll-area::-webkit-scrollbar {
+  display: none;
+}
