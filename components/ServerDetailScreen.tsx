@@ -1,17 +1,37 @@
 "use client";
 
-import Image from "next/image";
-import { ChevronLeft } from "lucide-react";
-import { useState } from "react";
+import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
+import React, { useState } from "react";
 import type { FilterServer } from "@/types";
 
-type Visibility = "more" | "default" | "less" | "off";
+type Visibility = "less" | "good" | "more";
 
-const OPTIONS: { value: Visibility; label: string; description: string }[] = [
-  { value: "more", label: "Show More", description: "See more posts from this server in ICYMI" },
-  { value: "default", label: "Default", description: "Discord's standard recommendations" },
-  { value: "less", label: "Show Less", description: "Reduce posts from this server in ICYMI" },
-  { value: "off", label: "Off", description: "No content from this server in ICYMI" },
+const GoodAsIsIcon = () => (
+  <svg width="26" height="26" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+    <path fillRule="evenodd" clipRule="evenodd" d="M40.0002 76.6667C49.7248 76.6667 59.0511 72.8036 65.9274 65.9273C72.8037 59.051 76.6668 49.7246 76.6668 40C76.6668 30.2754 72.8037 20.9491 65.9274 14.0728C59.0511 7.19646 49.7248 3.33337 40.0002 3.33337C30.2756 3.33337 20.9492 7.19646 14.0729 14.0728C7.19658 20.9491 3.3335 30.2754 3.3335 40C3.3335 49.7246 7.19658 59.051 14.0729 65.9273C20.9492 72.8036 30.2756 76.6667 40.0002 76.6667ZM21.6668 43.3334C22.9929 43.3334 24.2647 42.8066 25.2024 41.8689C26.14 40.9312 26.6668 39.6595 26.6668 38.3334C26.6668 37.0073 26.14 35.7355 25.2024 34.7978C24.2647 33.8602 22.9929 33.3334 21.6668 33.3334C20.3407 33.3334 19.069 33.8602 18.1313 34.7978C17.1936 35.7355 16.6668 37.0073 16.6668 38.3334C16.6668 39.6595 17.1936 40.9312 18.1313 41.8689C19.069 42.8066 20.3407 43.3334 21.6668 43.3334ZM58.3335 43.3334C59.6596 43.3334 60.9313 42.8066 61.869 41.8689C62.8067 40.9312 63.3335 39.6595 63.3335 38.3334C63.3335 37.0073 62.8067 35.7355 61.869 34.7978C60.9313 33.8602 59.6596 33.3334 58.3335 33.3334C57.0074 33.3334 55.7356 33.8602 54.798 34.7978C53.8603 35.7355 53.3335 37.0073 53.3335 38.3334C53.3335 39.6595 53.8603 40.9312 54.798 41.8689C55.7356 42.8066 57.0074 43.3334 58.3335 43.3334ZM25.6668 47.2334C26.03 46.9877 26.438 46.8161 26.8676 46.7283C27.2972 46.6406 27.7398 46.6385 28.1702 46.7221C28.6006 46.8057 29.0103 46.9734 29.3758 47.2155C29.7413 47.4577 30.0554 47.7696 30.3002 48.1334C31.3661 49.7284 32.809 51.036 34.5009 51.9403C36.1929 52.8446 38.0817 53.3177 40.0002 53.3177C41.9186 53.3177 43.8075 52.8446 45.4994 51.9403C47.1914 51.036 48.6342 49.7284 49.7002 48.1334C50.1952 47.3996 50.9615 46.8926 51.8304 46.7238C52.6994 46.555 53.5997 46.7383 54.3335 47.2334C55.0673 47.7284 55.5743 48.4947 55.7431 49.3636C55.9119 50.2326 55.7286 51.1329 55.2335 51.8667C53.5577 54.3693 51.2912 56.4204 48.6343 57.8388C45.9774 59.2572 43.012 59.9992 40.0002 59.9992C36.9884 59.9992 34.0229 59.2572 31.366 57.8388C28.7092 56.4204 26.4426 54.3693 24.7668 51.8667C24.5159 51.5024 24.34 51.0918 24.2494 50.6588C24.1588 50.2258 24.1553 49.7792 24.2391 49.3448C24.3228 48.9105 24.4922 48.4971 24.7373 48.1289C24.9825 47.7607 25.2984 47.4449 25.6668 47.2V47.2334Z" fill="#ABABAB"/>
+  </svg>
+);
+
+const SeeMoreIcon = () => (
+  <svg width="26" height="26" viewBox="0 0 81 81" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+    <path fillRule="evenodd" clipRule="evenodd" d="M51.3427 5.114C44.8277 2.99123 37.8483 2.73647 31.1959 4.37861C24.5435 6.02076 18.4844 9.4941 13.7056 14.4047C8.92688 19.3154 5.61973 25.4668 4.15924 32.1614C2.69875 38.856 3.14337 45.8259 5.44266 52.2807C10.1093 48.2807 18.1093 49.5807 20.576 56.214L21.4427 58.5473L23.776 59.4473C30.4427 61.8807 31.776 69.914 27.7427 74.5807C34.1974 76.88 41.1673 77.3246 47.8619 75.8641C54.5565 74.4036 60.708 71.0964 65.6186 66.3177C70.5292 61.5389 74.0026 55.4798 75.6447 48.8274C77.2869 42.175 77.0321 35.1956 74.9093 28.6807C73.9265 30.2049 72.5387 31.4254 70.9013 32.2053C69.264 32.9853 67.4418 33.2939 65.6389 33.0967C63.8361 32.8994 62.1237 32.2041 60.6938 31.0886C59.2638 29.973 58.1727 28.4813 57.5427 26.7807L56.4093 23.6807C56.401 23.6577 56.3877 23.6368 56.3705 23.6195C56.3532 23.6023 56.3323 23.589 56.3093 23.5807L53.2093 22.4473C51.5189 21.8098 50.0384 20.7158 48.9325 19.2871C47.8267 17.8585 47.1388 16.151 46.9453 14.3547C46.7519 12.5584 47.0605 10.7437 47.8368 9.11232C48.6131 7.48093 49.8267 6.09685 51.3427 5.114ZM21.676 36.6807C23.0021 36.6807 24.2738 36.1539 25.2115 35.2162C26.1492 34.2785 26.676 33.0067 26.676 31.6807C26.676 30.3546 26.1492 29.0828 25.2115 28.1451C24.2738 27.2074 23.0021 26.6807 21.676 26.6807C20.3499 26.6807 19.0781 27.2074 18.1405 28.1451C17.2028 29.0828 16.676 30.3546 16.676 31.6807C16.676 33.0067 17.2028 34.2785 18.1405 35.2162C19.0781 36.1539 20.3499 36.6807 21.676 36.6807ZM51.676 46.6807C52.3326 46.6807 52.9828 46.5513 53.5894 46.3001C54.196 46.0488 54.7472 45.6805 55.2115 45.2162C55.6758 44.7519 56.0441 44.2007 56.2954 43.5941C56.5467 42.9875 56.676 42.3373 56.676 41.6807C56.676 41.0241 56.5467 40.3739 56.2954 39.7673C56.0441 39.1606 55.6758 38.6094 55.2115 38.1451C54.7472 37.6808 54.196 37.3125 53.5894 37.0613C52.9828 36.81 52.3326 36.6807 51.676 36.6807C50.3499 36.6807 49.0781 37.2075 48.1405 38.1451C47.2028 39.0828 46.676 40.3546 46.676 41.6807C46.676 43.0067 47.2028 44.2785 48.1405 45.2162C49.0781 46.1539 50.3499 46.6807 51.676 46.6807ZM42.376 48.4807C43.276 47.0473 42.4427 45.314 40.9427 44.8473L27.4093 40.7473C25.9093 40.2807 24.276 41.2473 24.2093 42.9473C24.0639 45.1631 24.6551 47.3648 25.891 49.2096C27.1269 51.0545 28.9382 52.4389 31.0427 53.1473C35.3427 54.4807 39.9093 52.4473 42.376 48.4807Z" fill="#ABABAB"/>
+    <path d="M64.7427 12.9473C65.5427 13.6806 66.3427 14.4806 67.076 15.2806C66.9391 15.4331 66.8057 15.5887 66.676 15.7473C66.0093 14.8473 65.176 14.0473 64.276 13.3473L64.7427 12.9473Z" fill="#ABABAB"/>
+    <path d="M63.6426 2.11381C63.8715 1.49364 64.2849 0.958527 64.8273 0.580576C65.3697 0.202626 66.0148 0 66.6759 0C67.337 0 67.9821 0.202626 68.5245 0.580576C69.0669 0.958527 69.4804 1.49364 69.7092 2.11381L70.8426 5.21381C71.1758 6.1235 71.7033 6.94962 72.3884 7.63467C73.0734 8.31972 73.8996 8.84723 74.8092 9.18048L77.9092 10.3138C78.5294 10.5427 79.0645 10.9562 79.4425 11.4985C79.8204 12.0409 80.023 12.6861 80.023 13.3471C80.023 14.0082 79.8204 14.6534 79.4425 15.1957C79.0645 15.7381 78.5294 16.1516 77.9092 16.3805L74.8092 17.5138C73.8996 17.8471 73.0734 18.3746 72.3884 19.0596C71.7033 19.7447 71.1758 20.5708 70.8426 21.4805L69.7092 24.5805C69.4804 25.2006 69.0669 25.7358 68.5245 26.1137C67.9821 26.4917 67.337 26.6943 66.6759 26.6943C66.0148 26.6943 65.3697 26.4917 64.8273 26.1137C64.2849 25.7358 63.8715 25.2006 63.6426 24.5805L62.5092 21.4805C62.176 20.5708 61.6485 19.7447 60.9634 19.0596C60.2784 18.3746 59.4523 17.8471 58.5426 17.5138L55.4426 16.3805C54.8224 16.1516 54.2873 15.7381 53.9093 15.1957C53.5314 14.6534 53.3288 14.0082 53.3288 13.3471C53.3288 12.6861 53.5314 12.0409 53.9093 11.4985C54.2873 10.9562 54.8224 10.5427 55.4426 10.3138L58.5426 9.18048C59.4523 8.84723 60.2784 8.31972 60.9634 7.63467C61.6485 6.94962 62.176 6.1235 62.5092 5.21381L63.6426 2.11381ZM9.00924 58.5138C9.20644 57.9646 9.56841 57.4896 10.0457 57.1539C10.523 56.8181 11.0923 56.6379 11.6759 56.6379C12.2595 56.6379 12.8288 56.8181 13.3061 57.1539C13.7834 57.4896 14.1454 57.9646 14.3426 58.5138L15.2092 60.8805C15.543 61.7807 16.0672 62.5981 16.7461 63.277C17.4249 63.9558 18.2424 64.4801 19.1426 64.8138L21.4759 65.6805C22.0251 65.8777 22.5001 66.2397 22.8359 66.717C23.1716 67.1943 23.3518 67.7636 23.3518 68.3471C23.3518 68.9307 23.1716 69.5 22.8359 69.9773C22.5001 70.4546 22.0251 70.8166 21.4759 71.0138L19.1426 71.8805C18.2424 72.2142 17.4249 72.7384 16.7461 73.4173C16.0672 74.0962 15.543 74.9136 15.2092 75.8138L14.3426 78.1471C14.1454 78.6964 13.7834 79.1713 13.3061 79.5071C12.8288 79.8429 12.2595 80.023 11.6759 80.023C11.0923 80.023 10.523 79.8429 10.0457 79.5071C9.56841 79.1713 9.20644 78.6964 9.00924 78.1471L8.14257 75.8138C7.80883 74.9136 7.2846 74.0962 6.60574 73.4173C5.92688 72.7384 5.10941 72.2142 4.20924 71.8805L1.87591 71.0138C1.32667 70.8166 0.851717 70.4546 0.515955 69.9773C0.180193 69.5 0 68.9307 0 68.3471C0 67.7636 0.180193 67.1943 0.515955 66.717C0.851717 66.2397 1.32667 65.8777 1.87591 65.6805L4.20924 64.8138C5.10941 64.4801 5.92688 63.9558 6.60574 63.277C7.2846 62.5981 7.80883 61.7807 8.14257 60.8805L9.00924 58.5471V58.5138Z" fill="#ABABAB"/>
+  </svg>
+);
+
+// Same face as GoodAsIsIcon but with the smile subpath reflected vertically
+// (new_y = 107 - old_y) to produce a frown cutout via the evenodd fill rule.
+const SeeLessIcon = () => (
+  <svg width="26" height="26" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+    <path fillRule="evenodd" clipRule="evenodd" d="M40.0001 76.6668C49.7247 76.6668 59.051 72.8037 65.9274 65.9274C72.8037 59.0511 76.6668 49.7248 76.6668 40.0002C76.6668 30.2756 72.8037 20.9492 65.9274 14.0729C59.051 7.19658 49.7247 3.3335 40.0001 3.3335C30.2755 3.3335 20.9492 7.19658 14.0729 14.0729C7.19659 20.9492 3.3335 30.2756 3.3335 40.0002C3.3335 49.7248 7.19659 59.0511 14.0729 65.9274C20.9492 72.8037 30.2755 76.6668 40.0001 76.6668ZM21.6668 43.3335C22.9929 43.3335 24.2646 42.8067 25.2023 41.869C26.14 40.9314 26.6668 39.6596 26.6668 38.3335C26.6668 37.0074 26.14 35.7356 25.2023 34.798C24.2646 33.8603 22.9929 33.3335 21.6668 33.3335C20.3407 33.3335 19.0689 33.8603 18.1313 34.798C17.1936 35.7356 16.6668 37.0074 16.6668 38.3335C16.6668 39.6596 17.1936 40.9314 18.1313 41.869C19.0689 42.8067 20.3407 43.3335 21.6668 43.3335ZM58.3335 43.3335C59.6595 43.3335 60.9313 42.8067 61.869 41.869C62.8067 40.9314 63.3335 39.6596 63.3335 38.3335C63.3335 37.0074 62.8067 35.7356 61.869 34.798C60.9313 33.8603 59.6595 33.3335 58.3335 33.3335C57.0074 33.3335 55.7356 33.8603 54.7979 34.798C53.8602 35.7356 53.3335 37.0074 53.3335 38.3335C53.3335 39.6596 53.8602 40.9314 54.7979 41.869C55.7356 42.8067 57.0074 43.3335 58.3335 43.3335ZM25.6668 59.7665C26.0299 60.0122 26.438 60.1838 26.8675 60.2715C27.2971 60.3593 27.7398 60.3614 28.1702 60.2778C28.6006 60.1942 29.0103 60.0265 29.3757 59.7843C29.7412 59.5422 30.0554 59.2303 30.3001 58.8665C31.3661 57.2715 32.8089 55.9639 34.5009 55.0596C36.1928 54.1553 38.0817 53.6822 40.0001 53.6822C41.9186 53.6822 43.8074 54.1553 45.4994 55.0596C47.1913 55.9639 48.6342 57.2715 49.7001 58.8665C50.1952 59.6003 50.9615 60.1073 51.8304 60.2761C52.6993 60.4449 53.5997 60.2616 54.3335 59.7665C55.0672 59.2714 55.5743 58.5051 55.743 57.6362C55.9118 56.7673 55.7285 55.8669 55.2335 55.1332C53.5577 52.6306 51.2911 50.5795 48.6342 49.1611C45.9774 47.7427 43.0119 47.0006 40.0001 47.0006C36.9883 47.0006 34.0229 47.7427 31.366 49.1611C28.7091 50.5795 26.4426 52.6306 24.7668 55.1332C24.5159 55.4975 24.34 55.9081 24.2494 56.3411C24.1588 56.7741 24.1553 57.2207 24.239 57.6551C24.3228 58.0894 24.4922 58.5028 24.7373 58.871C24.9824 59.2392 25.2984 59.555 25.6668 59.8V59.7665Z" fill="#ABABAB"/>
+  </svg>
+);
+
+const SEGMENTS: { value: Visibility; label: string; icon: React.ReactElement }[] = [
+  { value: "less", label: "See Less", icon: <SeeLessIcon /> },
+  { value: "good", label: "Good As Is", icon: <GoodAsIsIcon /> },
+  { value: "more", label: "See More!", icon: <SeeMoreIcon /> },
 ];
 
 interface ServerDetailScreenProps {
@@ -20,89 +40,165 @@ interface ServerDetailScreenProps {
 }
 
 export default function ServerDetailScreen({ server, onBack }: ServerDetailScreenProps) {
-  const [visibility, setVisibility] = useState<Visibility>("default");
+  const [visibility, setVisibility] = useState<Visibility>("good");
+  const [showInICYMI, setShowInICYMI] = useState(true);
 
   return (
     <div className="flex flex-col h-full" style={{ backgroundColor: "#1C1D22" }}>
+
       {/* Header */}
-      <div className="relative flex items-center px-4 py-3">
+      <div className="relative flex items-center px-4 py-3 flex-shrink-0">
         <button
           onClick={onBack}
           aria-label="Back"
-          className="flex items-center gap-1 text-[#5865f2] hover:opacity-80 active:opacity-60 transition-opacity"
+          className="text-white hover:opacity-80 active:opacity-60 transition-opacity"
         >
-          <ChevronLeft size={20} strokeWidth={2.5} />
-          <span className="text-[16px] font-medium">Servers</span>
+          <ChevronLeft size={22} strokeWidth={2.5} />
         </button>
         <h1 className="absolute left-1/2 -translate-x-1/2 text-[17px] font-bold text-white whitespace-nowrap">
           {server.name}
         </h1>
       </div>
 
-      {/* Server identity */}
-      <div className="flex flex-col items-center pt-6 pb-5 gap-3">
-        <div
-          className="relative rounded-full overflow-hidden"
-          style={{ width: 72, height: 72 }}
-        >
-          <Image
-            src={server.imageUrl}
-            alt={server.name}
-            fill
-            className="object-cover"
-            sizes="72px"
-          />
-        </div>
-        <p className="text-[20px] font-bold text-white">{server.name}</p>
-      </div>
+      {/* Scrollable body */}
+      <div className="flex-1 overflow-y-auto">
 
-      {/* Visibility options */}
-      <div className="px-4">
-        <p className="text-[12px] font-semibold uppercase tracking-[0.08em] mb-2 px-1" style={{ color: "#949cf7" }}>
-          ICYMI Visibility
-        </p>
-        <div className="rounded-xl overflow-hidden" style={{ backgroundColor: "#2C2D35" }}>
-          {OPTIONS.map((option, index) => (
-            <div key={option.value}>
-              {index > 0 && (
-                <div
-                  className="mx-4"
-                  style={{ height: 1, backgroundColor: "rgba(255,255,255,0.06)" }}
-                  aria-hidden
-                />
-              )}
-              <button
-                className="w-full flex items-center justify-between px-4 py-4 hover:bg-white/[0.04] active:bg-white/[0.08] transition-colors"
-                onClick={() => setVisibility(option.value)}
-              >
-                <div className="flex flex-col items-start gap-[3px]">
-                  <span className="text-[15px] font-semibold text-white">{option.label}</span>
-                  <span className="text-[13px]" style={{ color: "#949cf7" }}>
-                    {option.description}
+        {/* Server Preferences */}
+        <div className="px-4 pt-3 pb-4">
+          <p className="text-[13px] font-semibold mb-0.5" style={{ color: "#b5bac1" }}>
+            Server Preferences
+          </p>
+          <p className="text-[13px] mb-3" style={{ color: "#80848e" }}>
+            How much content would you like to see from {server.name} overall?
+          </p>
+
+          {/* Segmented control */}
+          <div className="rounded-xl flex gap-1 p-1.5" style={{ backgroundColor: "#27272F" }}>
+            {SEGMENTS.map((seg) => {
+              const selected = visibility === seg.value;
+              return (
+                <button
+                  key={seg.value}
+                  onClick={() => setVisibility(seg.value)}
+                  className="flex-1 flex flex-col items-center gap-1 py-3 rounded-lg transition-all"
+                  style={{ backgroundColor: selected ? "#3A3B45" : "transparent" }}
+                >
+                  {seg.icon}
+                  <span
+                    className="text-[12px] font-semibold"
+                    style={{ color: selected ? "white" : "#80848e" }}
+                  >
+                    {seg.label}
                   </span>
-                </div>
-                {/* Radio button */}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Show content in ICYMI toggle */}
+        <div className="px-4 pb-1">
+          <div className="rounded-xl px-4" style={{ backgroundColor: "#27272F" }}>
+            <div className="flex items-center justify-between py-4">
+              <span className="text-[15px] font-semibold text-white">Show content in ICYMI</span>
+
+              {/* iOS-style toggle */}
+              <button
+                onClick={() => setShowInICYMI((v) => !v)}
+                aria-label={showInICYMI ? "Disable ICYMI" : "Enable ICYMI"}
+                className="relative flex-shrink-0"
+                style={{
+                  width: 50,
+                  height: 30,
+                  borderRadius: 15,
+                  backgroundColor: showInICYMI ? "#5865f2" : "#4e5058",
+                  transition: "background-color 200ms",
+                }}
+              >
                 <div
-                  className="flex-shrink-0 rounded-full border-2 flex items-center justify-center"
+                  className="absolute top-[3px] flex items-center justify-center rounded-full bg-white"
                   style={{
-                    width: 22,
-                    height: 22,
-                    borderColor: visibility === option.value ? "#5865f2" : "#4e5058",
-                    backgroundColor: visibility === option.value ? "#5865f2" : "transparent",
+                    width: 24,
+                    height: 24,
+                    transform: showInICYMI ? "translateX(23px)" : "translateX(3px)",
+                    transition: "transform 200ms",
                   }}
                 >
-                  {visibility === option.value && (
-                    <div className="rounded-full bg-white" style={{ width: 8, height: 8 }} />
+                  {showInICYMI && (
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden>
+                      <path
+                        d="M2 6.5L5 9.5L11 3.5"
+                        stroke="#5865f2"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
                   )}
                 </div>
               </button>
             </div>
-          ))}
+          </div>
+          <p className="text-[12px] px-1 mt-1.5" style={{ color: "#80848e" }}>
+            Turning this off means no content from this server will be shown.
+          </p>
         </div>
+
+        {/* Channel Preferences */}
+        <div className="px-4 pt-5 pb-4">
+          <p className="text-[13px] font-semibold mb-0.5" style={{ color: "#b5bac1" }}>
+            Channel Preferences
+          </p>
+          <p className="text-[13px] mb-3" style={{ color: "#80848e" }}>
+            Adjust how much content would you like to see from each channel.
+          </p>
+
+          {/* Text Channels group header */}
+          <div className="flex items-center gap-1.5 mb-2">
+            <ChevronDown size={14} strokeWidth={2.5} color="#80848e" />
+            <span className="text-[13px] font-semibold" style={{ color: "#b5bac1" }}>
+              Text Channels
+            </span>
+          </div>
+
+          {/* Channel list */}
+          <div className="rounded-xl overflow-hidden" style={{ backgroundColor: "#27272F" }}>
+            {server.channels.map((channel, i) => (
+              <div key={channel.id}>
+                {i > 0 && (
+                  <div
+                    className="mx-4"
+                    style={{ height: 1, backgroundColor: "rgba(255,255,255,0.06)" }}
+                    aria-hidden
+                  />
+                )}
+                <button
+                  className="w-full flex items-center gap-2.5 px-4 hover:bg-white/[0.04] active:bg-white/[0.08] transition-colors"
+                  style={{ height: 52 }}
+                >
+                  <span
+                    className="text-[16px] font-bold flex-shrink-0"
+                    style={{ color: "#80848e" }}
+                  >
+                    #
+                  </span>
+                  <span className="flex-1 text-left text-[15px] font-semibold text-white">
+                    {channel.name}
+                  </span>
+                  <span className="text-[13px] flex-shrink-0" style={{ color: "#80848e" }}>
+                    Good As Is
+                  </span>
+                  <ChevronRight size={16} strokeWidth={2.5} color="#80848e" className="flex-shrink-0" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
 
       {/* iOS home indicator */}
-      <div className="mt-auto flex justify-center pb-2 pt-3 flex-shrink-0" aria-hidden>
+      <div className="flex justify-center pb-2 pt-3 flex-shrink-0" aria-hidden>
         <div className="w-[134px] h-[5px] rounded-full bg-white opacity-30" />
       </div>
     </div>

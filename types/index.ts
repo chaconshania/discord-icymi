@@ -1,9 +1,15 @@
 export type NotificationType = "popular" | "interesting";
 
+export interface FilterChannel {
+  id: string;
+  name: string;
+}
+
 export interface FilterServer {
   id: string;
   name: string;
   imageUrl: string;
+  channels: FilterChannel[];
 }
 
 export interface Reaction {
