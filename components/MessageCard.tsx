@@ -26,10 +26,11 @@ function NotificationBadge({ type }: NotificationBadgeProps) {
 
 interface MessageCardProps {
   message: ICYMIMessage;
+  onReply: (message: ICYMIMessage) => void;
   onForward: (message: ICYMIMessage) => void;
 }
 
-export default function MessageCard({ message, onForward }: MessageCardProps) {
+export default function MessageCard({ message, onReply, onForward }: MessageCardProps) {
   return (
     <article className="px-4 pt-4 pb-5 bg-[#1C1D23]">
       {/* ── Card header ────────────────────────────────────────── */}
@@ -119,7 +120,7 @@ export default function MessageCard({ message, onForward }: MessageCardProps) {
       )}
 
       {/* ── Reply / Forward ────────────────────────────────────── */}
-      {message.showActions && <CardActions onForward={() => onForward(message)} />}
+      {message.showActions && <CardActions onReply={() => onReply(message)} onForward={() => onForward(message)} />}
     </article>
   );
 }

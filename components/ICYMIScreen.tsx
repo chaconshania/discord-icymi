@@ -6,6 +6,7 @@ import MessageCard from "./MessageCard";
 import BottomNav from "./BottomNav";
 import IOSStatusBar from "./IOSStatusBar";
 import ForwardSheet from "./ForwardSheet";
+import ReplySheet from "./ReplySheet";
 import { icymiMessages } from "@/data/messages";
 import type { ICYMIMessage } from "@/types";
 
@@ -15,6 +16,7 @@ interface ICYMIScreenProps {
 
 export default function ICYMIScreen({ onFilter }: ICYMIScreenProps) {
   const [forwardMessage, setForwardMessage] = useState<ICYMIMessage | null>(null);
+  const [replyMessage, setReplyMessage] = useState<ICYMIMessage | null>(null);
 
   return (
     <div className="flex flex-col h-full bg-discord-bg overflow-hidden relative">
@@ -39,7 +41,7 @@ export default function ICYMIScreen({ onFilter }: ICYMIScreenProps) {
                 aria-hidden
               />
             )}
-            <MessageCard message={message} onForward={setForwardMessage} />
+            <MessageCard message={message} onReply={setReplyMessage} onForward={setForwardMessage} />
           </div>
         ))}
       </main>
@@ -52,11 +54,19 @@ export default function ICYMIScreen({ onFilter }: ICYMIScreenProps) {
         <div className="w-[134px] h-[5px] rounded-full bg-white" />
       </div>
 
-      {/* Forward sheet — renders over the full screen */}
+      {/* Forward sheet */}
       {forwardMessage && (
         <ForwardSheet
           message={forwardMessage}
           onClose={() => setForwardMessage(null)}
+        />
+      )}
+
+      {/* Reply sheet — keyboard slides up from bottom */}
+      {replyMessage && (
+        <ReplySheet
+          message={replyMessage}
+          onClose={() => setReplyMessage(null)}
         />
       )}
     </div>

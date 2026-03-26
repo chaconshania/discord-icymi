@@ -260,6 +260,7 @@ interface ForwardSheetProps {
 
 export default function ForwardSheet({ message, onClose }: ForwardSheetProps) {
   const [mounted, setMounted] = useState(false);
+  const [closing, setClosing] = useState(false);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [note, setNote] = useState("");
@@ -267,6 +268,11 @@ export default function ForwardSheet({ message, onClose }: ForwardSheetProps) {
   useEffect(() => {
     requestAnimationFrame(() => setMounted(true));
   }, []);
+
+  function handleClose() {
+    setClosing(true);
+    setTimeout(onClose, 320);
+  }
 
   const filtered = useMemo(() => {
     if (!query.trim()) return RECIPIENTS;
@@ -293,10 +299,10 @@ export default function ForwardSheet({ message, onClose }: ForwardSheetProps) {
         className="absolute inset-0 z-10"
         style={{
           backgroundColor: "rgba(0,0,0,0.6)",
-          opacity: mounted ? 1 : 0,
-          transition: "opacity 300ms",
+          opacity: mounted && !closing ? 1 : 0,
+          transition: "opacity 320ms",
         }}
-        onClick={onClose}
+        onClick={handleClose}
         aria-hidden
       />
 
@@ -306,7 +312,7 @@ export default function ForwardSheet({ message, onClose }: ForwardSheetProps) {
         style={{
           backgroundColor: "#1C1D22",
           maxHeight: "92%",
-          transform: mounted ? "translateY(0)" : "translateY(100%)",
+          transform: mounted && !closing ? "translateY(0)" : "translateY(100%)",
           transition: "transform 300ms cubic-bezier(0.32, 0.72, 0, 1)",
         }}
       >
@@ -324,7 +330,7 @@ export default function ForwardSheet({ message, onClose }: ForwardSheetProps) {
           style={{ borderBottom: "1px solid #2D2E33" }}
         >
           <button
-            onClick={onClose}
+            onClick={handleClose}
             aria-label="Close"
             className="w-9 h-9 flex items-center justify-center rounded-full text-white hover:bg-white/10 active:bg-white/[0.06] transition-colors"
           >
@@ -441,7 +447,7 @@ export default function ForwardSheet({ message, onClose }: ForwardSheetProps) {
               backgroundColor: "#5865f2",
               opacity: selected.size === 0 ? 0.4 : 1,
             }}
-            onClick={onClose}
+            onClick={handleClose}
           >
             Send
           </button>
