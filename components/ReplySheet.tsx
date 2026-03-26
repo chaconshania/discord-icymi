@@ -91,8 +91,16 @@ export default function ReplySheet({ message, onClose }: ReplySheetProps) {
   const visible = mounted && !closing;
 
   return (
-    <div
-      className="absolute bottom-0 left-0 right-0 z-20 flex flex-col"
+    <>
+      {/* Transparent backdrop — tapping outside closes the keyboard */}
+      <div
+        className="absolute inset-0 z-10"
+        onClick={handleClose}
+        aria-hidden
+      />
+
+      <div
+        className="absolute bottom-0 left-0 right-0 z-20 flex flex-col"
       style={{
         transform: visible ? "translateY(0)" : "translateY(100%)",
         transition: "transform 300ms cubic-bezier(0.32, 0.72, 0, 1)",
@@ -290,5 +298,6 @@ export default function ReplySheet({ message, onClose }: ReplySheetProps) {
         </div>
       </div>
     </div>
+    </>
   );
 }
