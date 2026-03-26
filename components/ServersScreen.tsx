@@ -32,7 +32,7 @@ export default function ServersScreen({
       </div>
 
       {/* Server list card */}
-      <div className="px-4 pt-4">
+      <div className="flex-1 overflow-y-auto px-4 pt-4 pb-2">
         <div className="rounded-xl overflow-hidden" style={{ backgroundColor: "#2C2D35" }}>
           {servers.map((server, index) => (
             <div key={server.id}>
