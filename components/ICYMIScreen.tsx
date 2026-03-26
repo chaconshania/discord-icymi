@@ -1,31 +1,23 @@
 "use client";
 
+import { useState } from "react";
 import ICYMIHeader from "./ICYMIHeader";
 import MessageCard from "./MessageCard";
 import BottomNav from "./BottomNav";
 import IOSStatusBar from "./IOSStatusBar";
+import ForwardSheet from "./ForwardSheet";
 import { icymiMessages } from "@/data/messages";
+import type { ICYMIMessage } from "@/types";
 
-/**
- * ICYMIScreen — the "In Case You Missed It" feed screen.
- *
- * Layout:
- *   ┌─────────────────┐
- *   │  Status bar     │  (safe area spacer)
- *   │  ICYMI header   │
- *   │                 │
- *   │  Message cards  │  (scrollable)
- *   │                 │
- *   │  Bottom nav     │
- *   └─────────────────┘
- */
 interface ICYMIScreenProps {
   onFilter?: () => void;
 }
 
 export default function ICYMIScreen({ onFilter }: ICYMIScreenProps) {
+  const [forwardMessage, setForwardMessage] = useState<ICYMIMessage | null>(null);
+
   return (
-    <div className="flex flex-col h-full bg-discord-bg overflow-hidden">
+    <div className="flex flex-col h-full bg-discord-bg overflow-hidden relative">
       {/* iOS status bar */}
       <IOSStatusBar />
 
@@ -39,7 +31,6 @@ export default function ICYMIScreen({ onFilter }: ICYMIScreenProps) {
       >
         {icymiMessages.map((message, index) => (
           <div key={message.id}>
-            {/* Full-width separator between cards */}
             {index > 0 && (
               <div
                 className="h-2.5"
@@ -48,7 +39,7 @@ export default function ICYMIScreen({ onFilter }: ICYMIScreenProps) {
                 aria-hidden
               />
             )}
-            <MessageCard message={message} />
+            <MessageCard message={message} onForward={setForwardMessage} />
           </div>
         ))}
       </main>
@@ -60,6 +51,14 @@ export default function ICYMIScreen({ onFilter }: ICYMIScreenProps) {
       <div className="flex justify-center pb-2 pt-3 flex-shrink-0" style={{ backgroundColor: "#2C2D35" }} aria-hidden>
         <div className="w-[134px] h-[5px] rounded-full bg-white" />
       </div>
+
+      {/* Forward sheet — renders over the full screen */}
+      {forwardMessage && (
+        <ForwardSheet
+          message={forwardMessage}
+          onClose={() => setForwardMessage(null)}
+        />
+      )}
     </div>
   );
 }

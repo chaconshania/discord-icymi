@@ -1,5 +1,8 @@
+interface CardActionsProps {
+  onForward: () => void;
+}
 
-export default function CardActions() {
+export default function CardActions({ onForward }: CardActionsProps) {
   return (
     <div className="flex items-center gap-3 mt-4">
       <button className="flex-1 flex items-center justify-center gap-2 h-[42px] rounded-full hover:bg-discord-bg-hover active:bg-discord-bg-tertiary text-discord-text-normal text-[14px] font-semibold transition-colors" style={{ backgroundColor: "#26262E" }}>
@@ -8,7 +11,11 @@ export default function CardActions() {
         </svg>
         Reply
       </button>
-      <button className="flex-1 flex items-center justify-center gap-2 h-[42px] rounded-full hover:bg-discord-bg-hover active:bg-discord-bg-tertiary text-discord-text-normal text-[14px] font-semibold transition-colors" style={{ backgroundColor: "#26262E" }}>
+      <button
+        className="flex-1 flex items-center justify-center gap-2 h-[42px] rounded-full hover:bg-discord-bg-hover active:bg-discord-bg-tertiary text-discord-text-normal text-[14px] font-semibold transition-colors"
+        style={{ backgroundColor: "#26262E" }}
+        onClick={onForward}
+      >
         <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
           <path d="M50.0002 83.3335C57.3969 83.3277 64.5817 80.8618 70.423 76.3241C76.2644 71.7865 80.4306 65.4348 82.2655 58.2692C84.1004 51.1037 83.4999 43.5313 80.5584 36.7446C77.617 29.9578 72.5018 24.3422 66.0182 20.782C59.5346 17.2218 52.051 15.9192 44.7458 17.0794C37.4406 18.2396 30.7288 21.7966 25.6672 27.1904C20.6057 32.5842 17.4819 39.5083 16.7879 46.8724C16.0938 54.2365 17.8689 61.6223 21.8335 67.8668C22.2668 68.5001 22.2002 69.3335 21.7002 69.9001L14.8335 77.8001C14.4107 78.2814 14.1356 78.8743 14.041 79.5078C13.9463 80.1414 14.0363 80.7888 14.3 81.3726C14.5638 81.9563 14.9902 82.4518 15.5282 82.7995C16.0661 83.1473 16.6929 83.3326 17.3335 83.3335H50.0002Z" fill="#ABABAB"/>
         </svg>
