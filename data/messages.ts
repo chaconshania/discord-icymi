@@ -15,7 +15,7 @@ export const icymiMessages: ICYMIMessage[] = [
     reactions: [
       { id: "r1", type: "emoji", value: "😍", count: 8 },
       { id: "r2", type: "emoji", value: "👻", count: 5 },
-      { id: "r3", type: "custom-text", value: "nice", count: 2 },
+      { id: "r3", type: "emoji", value: "👌", count: 2 },
     ],
     showActions: true,
     avatars: [
@@ -68,7 +68,7 @@ export const icymiMessages: ICYMIMessage[] = [
     reactions: [
       { id: "r1", type: "emoji", value: "🔥", count: 24 },
       { id: "r2", type: "emoji", value: "😍", count: 17 },
-      { id: "r3", type: "custom-text", value: "W build", count: 11 },
+      { id: "r3", type: "emoji", value: "💪", count: 11 },
     ],
     showActions: true,
     avatars: [
@@ -96,7 +96,7 @@ export const icymiMessages: ICYMIMessage[] = [
     reactions: [
       { id: "r1", type: "emoji", value: "🎉", count: 42 },
       { id: "r2", type: "emoji", value: "🗡️", count: 19 },
-      { id: "r3", type: "custom-text", value: "legend", count: 8 },
+      { id: "r3", type: "emoji", value: "🐐", count: 8 },
     ],
     showActions: true,
     avatars: [
@@ -153,7 +153,7 @@ export const icymiMessages: ICYMIMessage[] = [
     reactions: [
       { id: "r1", type: "emoji", value: "🏆", count: 31 },
       { id: "r2", type: "emoji", value: "👀", count: 22 },
-      { id: "r3", type: "custom-text", value: "hyped", count: 14 },
+      { id: "r3", type: "emoji", value: "🙌", count: 14 },
     ],
     showActions: true,
     avatars: [
@@ -183,7 +183,7 @@ export const icymiMessages: ICYMIMessage[] = [
     reactions: [
       { id: "r1", type: "emoji", value: "😭", count: 67 },
       { id: "r2", type: "emoji", value: "🏰", count: 44 },
-      { id: "r3", type: "custom-text", value: "insane", count: 29 },
+      { id: "r3", type: "emoji", value: "🤯", count: 29 },
     ],
     showActions: true,
     avatars: [
@@ -211,7 +211,7 @@ export const icymiMessages: ICYMIMessage[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=800&q=80",
     reactions: [
-      { id: "r1", type: "custom-text", value: "facts", count: 38 },
+      { id: "r1", type: "emoji", value: "💯", count: 38 },
       { id: "r2", type: "emoji", value: "✅", count: 27 },
       { id: "r3", type: "emoji", value: "❌", count: 9 },
     ],
@@ -243,7 +243,7 @@ export const icymiMessages: ICYMIMessage[] = [
     reactions: [
       { id: "r1", type: "emoji", value: "👑", count: 53 },
       { id: "r2", type: "emoji", value: "😮", count: 31 },
-      { id: "r3", type: "custom-text", value: "GOTY", count: 18 },
+      { id: "r3", type: "emoji", value: "🏆", count: 18 },
     ],
     showActions: true,
     avatars: [
@@ -271,7 +271,7 @@ export const icymiMessages: ICYMIMessage[] = [
     reactions: [
       { id: "r1", type: "emoji", value: "🎉", count: 89 },
       { id: "r2", type: "emoji", value: "👏", count: 61 },
-      { id: "r3", type: "custom-text", value: "respect", count: 33 },
+      { id: "r3", type: "emoji", value: "🫡", count: 33 },
     ],
     showActions: true,
     avatars: [
@@ -298,7 +298,7 @@ export const icymiMessages: ICYMIMessage[] = [
     body: "New Super Mario 64 16-star WR just dropped — 14:06.183. The parallel universe strats are getting so optimized I genuinely don't know where the ceiling is anymore",
     reactions: [
       { id: "r1", type: "emoji", value: "🤯", count: 44 },
-      { id: "r2", type: "custom-text", value: "WR!", count: 27 },
+      { id: "r2", type: "emoji", value: "⏱️", count: 27 },
     ],
     showActions: false,
     avatars: [
